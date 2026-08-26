@@ -1,0 +1,275 @@
+.home {
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding: 0 24px;
+}
+
+.hero {
+    min-height: 70vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 700px;
+}
+
+.hero-label {
+    margin: 0 0 16px;
+
+    color: #2563eb;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.hero h1 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 56px;
+
+    line-height: 1.1;
+}
+
+.hero-description {
+    margin: 24px 0 32px;
+
+    color: #6b7280;
+
+    font-size: 18px;
+
+    line-height: 1.6;
+}
+
+.hero-button {
+    display: inline-block;
+
+    padding: 13px 24px;
+
+    background: #2563eb;
+
+    color: white;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    transition: background 0.2s ease;
+}
+
+.hero-button:hover {
+    background: #1d4ed8;
+}
+
+.features {
+    padding: 80px 0;
+}
+
+.features h2 {
+    margin: 0 0 32px;
+
+    text-align: center;
+
+    font-size: 32px;
+
+    color: #111827;
+}
+
+.feature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 24px;
+}
+
+.feature-card {
+    padding: 28px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    background: white;
+}
+
+.feature-card h3 {
+    margin: 0 0 10px;
+
+    font-size: 18px;
+
+    color: #111827;
+}
+
+.feature-card p {
+    margin: 0;
+
+    color: #6b7280;
+
+    line-height: 1.6;
+}
+
+.popular-services {
+    padding: 80px 0;
+}
+
+.section-heading {
+    text-align: center;
+
+    max-width: 600px;
+
+    margin: 0 auto 40px;
+}
+
+.section-heading p {
+    margin: 0 0 10px;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.section-heading h2 {
+    margin: 0 0 12px;
+
+    color: #111827;
+
+    font-size: 32px;
+}
+
+.section-heading span {
+    color: #6b7280;
+
+    font-size: 16px;
+}
+
+.service-preview-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 24px;
+}
+
+.service-preview-card {
+    padding: 28px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    background: white;
+}
+
+.service-preview-card h3 {
+    margin: 0 0 12px;
+
+    color: #111827;
+
+    font-size: 20px;
+}
+
+.service-preview-card p {
+    margin: 0 0 20px;
+
+    color: #6b7280;
+
+    line-height: 1.6;
+}
+
+.service-preview-card strong {
+    color: #2563eb;
+
+    font-size: 18px;
+}
+
+.popular-services-action {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 32px;
+}
+
+.secondary-button {
+    display: inline-block;
+
+    padding: 11px 20px;
+
+    border: 1px solid #2563eb;
+
+    border-radius: 8px;
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.secondary-button:hover {
+    background: #2563eb;
+
+    color: white;
+}
+
+@media (max-width: 768px) {
+
+    .home {
+        padding: 0 16px;
+    }
+
+    .hero {
+        min-height: 60vh;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .hero-description {
+        font-size: 16px;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features {
+        padding: 60px 0;
+    }
+
+    .service-preview-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
