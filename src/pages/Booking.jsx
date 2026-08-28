@@ -1,44 +1,39 @@
 import "./../styles/Booking.css";
 
 import { useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const services = [
-  {
-    id: 1,
-    name: "Haircut",
-    price: 300,
-    duration: 30,
-  },
-  {
-    id: 2,
-    name: "Hair Coloring",
-    price: 800,
-    duration: 90,
-  },
-  {
-    id: 3,
-    name: "Hair Treatment",
-    price: 500,
-    duration: 60,
-  },
-  {
-    id: 4,
-    name: "Hair Styling",
-    price: 400,
-    duration: 45,
-  },
-];
+import axios from "axios";
 
 function Booking() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [error, setError] = useState("");
 
 
   const serviceId = Number(
     searchParams.get("service")
   );
+
+  useEffect(() => {
+    async function fetchServices() {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/services"
+        );
+
+        setServices(response.data);
+      } catch (error) {
+        setError("Failed to load services.");
+      } finally {
+        setLoadingServices(false);
+      }
+    }
+
+    fetchServices();
+  }, []);
 
   const selectedService = services.find(
     (service) => service.id === serviceId
@@ -48,8 +43,8 @@ function Booking() {
     name: "",
     email: "",
     phone: "",
-    date: "",
-    time: "",
+    bookingDate: "",
+    bookingTime: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -90,18 +85,18 @@ function Booking() {
       newErrors.phone = "Phone is required.";
     }
 
-    if (!formData.date) {
-      newErrors.date = "Date is required.";
+    if (!formData.bookingDate) {
+      newErrors.bookingDate = "Date is required.";
     }
 
-    if (!formData.time) {
-      newErrors.time = "Time is required.";
+    if (!formData.bookingTime) {
+      newErrors.bookingTime = "Time is required.";
     }
 
     return newErrors;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const newErrors = validateForm();
@@ -111,12 +106,36 @@ function Booking() {
       return;
     }
 
-    console.log({
-      service: selectedService,
-      customer: formData,
-    });
+    setError("");
 
-    navigate("/booking/success");
+    try {
+      await axios.post(
+        "http://localhost:5000/api/bookings",
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          serviceId: serviceId,
+          bookingDate: formData.bookingDate,
+          bookingTime: formData.bookingTime,
+        }
+      );
+
+      navigate("/booking/success");
+    } catch (error) {
+      setError(
+        error.response?.data?.message ||
+        "Failed to create booking."
+      );
+    }
+  }
+
+  if (loadingServices) {
+    return (
+      <main className="booking">
+        <h1>Loading...</h1>
+      </main>
+    );
   }
 
   if (!selectedService) {
@@ -231,14 +250,14 @@ function Booking() {
 
           <input
             type="date"
-            name="date"
-            value={formData.date}
+            name="bookingDate"
+            value={formData.bookingDate}
             onChange={handleChange}
           />
 
-          {errors.date && (
+          {errors.bookingDate && (
             <p className="form-error">
-              {errors.date}
+              {errors.bookingDate}
             </p>
           )}
 
@@ -248,14 +267,20 @@ function Booking() {
 
           <input
             type="time"
-            name="time"
-            value={formData.time}
+            name="bookingTime"
+            value={formData.bookingTime}
             onChange={handleChange}
           />
 
-          {errors.time && (
+          {errors.bookingTime && (
             <p className="form-error">
-              {errors.time}
+              {errors.bookingTime}
+            </p>
+          )}
+
+          {error && (
+            <p className="form-error">
+              {error}
             </p>
           )}
 

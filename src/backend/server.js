@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const bookingRoutes = require("./routes/bookingRoutes");
 
 const serviceRoutes = require("./routes/serviceRoutes");
 
@@ -13,6 +14,11 @@ app.use(express.json());
 app.use(
   "/api/services",
   serviceRoutes
+);
+
+app.use(
+  "/api/bookings",
+  bookingRoutes
 );
 
 app.listen(PORT, () => {
