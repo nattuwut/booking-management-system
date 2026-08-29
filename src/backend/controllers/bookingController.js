@@ -70,6 +70,42 @@ async function createBooking(req, res) {
   }
 }
 
+async function getBookings(req, res) {
+  try {
+    const result = await pool.query(`
+      SELECT
+        bookings.id,
+        customers.name AS customer_name,
+        customers.email,
+        customers.phone,
+        services.name AS service_name,
+        services.price,
+        services.duration,
+        bookings.booking_date,
+        bookings.booking_time,
+        bookings.status,
+        bookings.created_at
+      FROM bookings
+      JOIN customers
+        ON bookings.customer_id = customers.id
+      JOIN services
+        ON bookings.service_id = services.id
+      ORDER BY
+        bookings.booking_date ASC,
+        bookings.booking_time ASC
+    `);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to fetch bookings.",
+    });
+  }
+}
+
 module.exports = {
   createBooking,
+  getBookings,
 };

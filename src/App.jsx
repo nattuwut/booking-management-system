@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Booking from "./pages/Booking";
 import BookingSuccess from "./pages/BookingSuccess";
+import AdminBookings from "./pages/AdminBookings";
 
 function App() {
   return (
@@ -38,6 +39,11 @@ function App() {
         <Route
           path="/booking/success"
           element={<BookingSuccess />}
+        />
+
+        <Route
+          path="/admin/bookings"
+          element={<AdminBookings />}
         />
 
       </Routes>
