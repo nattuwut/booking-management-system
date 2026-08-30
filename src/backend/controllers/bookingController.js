@@ -105,7 +105,54 @@ async function getBookings(req, res) {
   }
 }
 
+async function updateBookingStatus(req, res) {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const allowedStatuses = [
+      "pending",
+      "confirmed",
+      "cancelled",
+    ];
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        message: "Invalid booking status.",
+      });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE bookings
+      SET status = $1
+      WHERE id = $2
+      RETURNING *
+      `,
+      [status, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        message: "Booking not found.",
+      });
+    }
+
+    res.json({
+      message: "Booking status updated successfully.",
+      booking: result.rows[0],
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to update booking status.",
+    });
+  }
+}
+
 module.exports = {
   createBooking,
   getBookings,
+  updateBookingStatus,
 };

@@ -26,6 +26,33 @@ function AdminBookings() {
     fetchBookings();
   }, []);
 
+  async function updateStatus(id, status) {
+    try {
+      await axios.patch(
+        `http://localhost:5000/api/bookings/${id}/status`,
+        {
+          status,
+        }
+      );
+
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking.id === id
+            ? {
+              ...booking,
+              status,
+            }
+            : booking
+        )
+      );
+    } catch (error) {
+      setError(
+        error.response?.data?.message ||
+        "Failed to update booking status."
+      );
+    }
+  }
+
   if (loading) {
     return (
       <main className="admin-bookings">
@@ -115,6 +142,67 @@ function AdminBookings() {
                   ).toLocaleString()}
                 </span>
               </div>
+
+              <div className="booking-actions">
+
+                {booking.status === "pending" && (
+                  <>
+                    <button
+                      className="confirm-button"
+                      onClick={() =>
+                        updateStatus(
+                          booking.id,
+                          "confirmed"
+                        )
+                      }
+                    >
+                      Confirm
+                    </button>
+
+                    <button
+                      className="cancel-button"
+                      onClick={() =>
+                        updateStatus(
+                          booking.id,
+                          "cancelled"
+                        )
+                      }
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
+
+                {booking.status === "confirmed" && (
+                  <button
+                    className="cancel-button"
+                    onClick={() =>
+                      updateStatus(
+                        booking.id,
+                        "cancelled"
+                      )
+                    }
+                  >
+                    Cancel Booking
+                  </button>
+                )}
+
+                {booking.status === "cancelled" && (
+                  <button
+                    className="confirm-button"
+                    onClick={() =>
+                      updateStatus(
+                        booking.id,
+                        "confirmed"
+                      )
+                    }
+                  >
+                    Confirm Again
+                  </button>
+                )}
+
+              </div>
+
             </div>
           ))}
         </div>
