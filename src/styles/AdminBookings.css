@@ -135,6 +135,32 @@
   background: #b91c1c;
 }
 
+.booking-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.booking-controls input,
+.booking-controls select {
+  padding: 11px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+}
+
+.booking-controls input {
+  flex: 1;
+}
+
+.booking-controls input:focus,
+.booking-controls select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
 @media (max-width: 600px) {
   .admin-header {
     align-items: flex-start;
@@ -150,5 +176,15 @@
   .booking-details {
     flex-direction: column;
     gap: 8px;
+  }
+
+  .booking-controls {
+    flex-direction: column;
+  }
+
+  .booking-controls input,
+  .booking-controls select {
+    width: 100%;
+    box-sizing: border-box;
   }
 }

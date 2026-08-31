@@ -8,6 +8,10 @@ function AdminBookings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sort, setSort] = useState("date-asc");
+
   useEffect(() => {
     async function fetchBookings() {
       try {
@@ -53,6 +57,43 @@ function AdminBookings() {
     }
   }
 
+  const filteredBookings = bookings
+    .filter((booking) => {
+      const searchText = search.toLowerCase();
+
+      const matchesSearch =
+        booking.customer_name
+          .toLowerCase()
+          .includes(searchText) ||
+        booking.email
+          .toLowerCase()
+          .includes(searchText) ||
+        booking.service_name
+          .toLowerCase()
+          .includes(searchText);
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        booking.status === statusFilter;
+
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(
+        `${a.booking_date}T${a.booking_time}`
+      );
+
+      const dateB = new Date(
+        `${b.booking_date}T${b.booking_time}`
+      );
+
+      if (sort === "date-desc") {
+        return dateB - dateA;
+      }
+
+      return dateA - dateB;
+    });
+
   if (loading) {
     return (
       <main className="admin-bookings">
@@ -73,6 +114,7 @@ function AdminBookings() {
 
   return (
     <main className="admin-bookings">
+
       <div className="admin-header">
         <div>
           <p className="admin-label">
@@ -83,21 +125,85 @@ function AdminBookings() {
         </div>
 
         <p>
-          {bookings.length} bookings
+          {filteredBookings.length} of {bookings.length} bookings
         </p>
       </div>
 
+      {bookings.length > 0 && (
+        <div className="booking-controls">
+
+          <input
+            type="text"
+            placeholder="Search customer, email, or service..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+          />
+
+          <select
+            value={statusFilter}
+            onChange={(e) =>
+              setStatusFilter(e.target.value)
+            }
+          >
+            <option value="all">
+              All Status
+            </option>
+
+            <option value="pending">
+              Pending
+            </option>
+
+            <option value="confirmed">
+              Confirmed
+            </option>
+
+            <option value="cancelled">
+              Cancelled
+            </option>
+          </select>
+
+          <select
+            value={sort}
+            onChange={(e) =>
+              setSort(e.target.value)
+            }
+          >
+            <option value="date-asc">
+              Date: Oldest First
+            </option>
+
+            <option value="date-desc">
+              Date: Newest First
+            </option>
+          </select>
+
+        </div>
+      )}
+
       {bookings.length === 0 ? (
+
         <div className="empty-bookings">
           <p>No bookings yet.</p>
         </div>
+
+      ) : filteredBookings.length === 0 ? (
+
+        <div className="empty-bookings">
+          <p>No bookings found.</p>
+        </div>
+
       ) : (
+
         <div className="bookings-list">
-          {bookings.map((booking) => (
+
+          {filteredBookings.map((booking) => (
             <div
               className="booking-card"
               key={booking.id}
             >
+
               <div className="booking-card-header">
                 <h2>
                   {booking.service_name}
@@ -205,8 +311,10 @@ function AdminBookings() {
 
             </div>
           ))}
+
         </div>
       )}
+
     </main>
   );
 }
