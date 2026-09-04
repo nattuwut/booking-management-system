@@ -80,11 +80,11 @@ function AdminBookings() {
     })
     .sort((a, b) => {
       const dateA = new Date(
-        `${a.booking_date}T${a.booking_time}`
+        `${a.booking_date.slice(0, 10)}T${a.booking_time}`
       );
 
       const dateB = new Date(
-        `${b.booking_date}T${b.booking_time}`
+        `${b.booking_date.slice(0, 10)}T${b.booking_time}`
       );
 
       if (sort === "date-desc") {
